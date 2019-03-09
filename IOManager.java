@@ -53,10 +53,11 @@ public class IOManager
 	
 	private void printInstructions()
 	{
-		System.out.println("Please enter the name of the input text file (including the file extension).");
+		System.out.println("\nPlease enter the name of the input text file (including the file extension).");
 		System.out.println("If the file is in a different directory, include the path to the file.");
 		System.out.println("If no text is entered, the program will try to execute on demo.txt in this directory.");
-		System.out.println("Enter \"Quit\" to exit.");
+		System.out.println("Enter \"Quit\" to exit.\n");
+		System.out.print("Filename: ");
 	}
 	
 	public ArrayList<String> read()
@@ -79,7 +80,8 @@ public class IOManager
 		return lines;
 	}
 	
-	public void InstantiateWriter()
+	//Returns name of the file being written to
+	public String InstantiateWriter()
 	{
 		File outFile;
 		int counter = 0;
@@ -90,7 +92,6 @@ public class IOManager
 			fileAlreadyExists = outFile.exists();
 			counter++;
 		} while(fileAlreadyExists);
-		System.out.println("Printing output to " + outFile.getName() + "...");
 	
 		try
 		{			
@@ -101,6 +102,8 @@ public class IOManager
 			System.out.println("Failed to create output file.");
 			e.printStackTrace();
 		}
+		
+		return outFile.getName();
 	}
 	
 	public void write(String output)

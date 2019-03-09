@@ -37,7 +37,7 @@ public class Requirement
 		details += line;
 	}
 	
-	public void addSubRequirement(Requirement req)
+	public void addSubreq(Requirement req)
 	{
 		subreqs.add(req);
 	}

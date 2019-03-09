@@ -21,17 +21,20 @@ public class JSONConverter
 		//Get input
 		IOManager io = new IOManager();
 		io.InstantiateReader();
+		System.out.println("\nReading in input...\n");
 		ArrayList<String> input = io.read();
 		
 		//Process input
+		System.out.println("Converting to JSON...\n");
 		String output = ConversionManager.textToJSON(input);
 		
 		//Write output
-		io.InstantiateWriter();
+		String outFileName = io.InstantiateWriter();
+		System.out.println("Printing output to " + outFileName + "...\n");
 		io.write(output);
 		
 		//Clean Up
 		io.closeReaders();
-		System.out.println("Conversion complete.");
+		System.out.println("Conversion complete.\n");
 	}
 }
