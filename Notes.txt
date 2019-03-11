@@ -1,1 +1,4 @@
 https://qiita.com/Yuu94/items/9ffdfcb2c26d6b33792e
+
+tokenize into words
+turn into json

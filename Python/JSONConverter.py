@@ -11,7 +11,7 @@ class Requirement:
         splitLine = reqLine.split(maxsplit=1)
         self.id = splitLine[0]
         self.description = splitLine[1]
-        self.details = None
+        self.details = ""
         self.subreqs = list()
 
         #Adds a String "line" to the details of this requirement.
@@ -162,7 +162,7 @@ class _ConversionManager:
             outputJSON += indent + "\t\t{\n"
             outputJSON += indent + "\t\t\t\"sub" + str(i+1) + "\": \"" + currentReq.id + "\",\n"
             outputJSON += indent + "\t\t\t\"desc\" : \"" + currentReq.description + "\",\n"
-            outputJSON += indent + "\t\t\t\"details\":\"" + currentReq.details + "\",\n"
+            outputJSON += indent + "\t\t\t\"details\":\"" + currentReq.details + "\"\n"
             outputJSON += indent + "\t\t}"
             #Add a comma, but only if this isn't the last requirement
             if (i != len(subreq)-1):
