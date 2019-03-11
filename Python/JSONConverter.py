@@ -182,6 +182,7 @@ class IOManager:
         print("\nPlease enter the name of the input text file (including the file extension).");
         print("If the file is in a different directory, include the path to the file.");
         print("If no text is entered, the program will try to execute on demo.txt in this directory.");
+        print("Output will be written to \"output.txt\", replacing the contents of the file it \"output.txt\" already exists.");
         print("Enter \"Quit\" to exit.\n");
         print("Filename: ", end="");
     
@@ -206,57 +207,11 @@ class IOManager:
                 print("Filename: ", end="")
         return dataList
         
-    # #Returns name of the file being written to
-    # public String instantiateWriter()
-    # {
-        # File outFile;
-        # int counter = 0;
-        # boolean fileAlreadyExists = true;
-        # do
-        # {
-            # outFile = new File("output" + Integer.toString(counter) + ".txt");
-            # fileAlreadyExists = outFile.exists();
-            # counter++;
-        # } while(fileAlreadyExists);
-    
-        # try
-        # {            
-            # writer = new BufferedWriter(new FileWriter(outFile));
-        # }
-        # catch (IOException e)
-        # {
-            # print("Failed to create output file.\n");
-            # e.printStackTrace();
-        # }
-        
-        # return outFile.getName();
-    # }
-    
-    # #instantiateWriter must be called first
-    # public void write(String output)
-    # {
-        # try
-        # {
-            # writer.write(output);
-        # }
-        # catch (IOException e)
-        # {
-            # e.printStackTrace();
-        # }
-    # }
-    
-    # public void closeWriter()
-    # {
-        # try
-        # {
-            # writer.close();
-        # }
-        # catch (IOException e)
-        # {
-            # print("Failed to close file writer.\n");
-            # e.printStackTrace();
-        # }
-    # }
+    # Write a string to output.txt (overwriting it if it exists)
+    # Input type: String
+    def writeOutput(output):
+        with open("output.txt", 'w+', encoding = "cp1252") as f:         #TODO consider changing encoding or removing encoding, just need it to work on my machine
+            f.write(output)
         
 def main():
     #Get input
@@ -265,13 +220,11 @@ def main():
     
     #Process input
     print("Converting to JSON...\n")
-    output = _ConversionManager.textToJSON(input);
+    output = _ConversionManager.textToJSON(input)
     
     #Write output
-#        String outFileName = io.instantiateWriter();
-#    print("Printing output to " + outFileName + "...\n");
-#        io.write(output);
-#        io.closeWriter();
+    print("Printing output to output.txt...\n");
+    IOManager.writeOutput(output)
     
     #Clean Up
     print("Conversion complete.\n")
