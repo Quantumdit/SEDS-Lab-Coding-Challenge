@@ -36,27 +36,9 @@ class _ConversionManager:
         #Generate a list requirements and subrequirements
         requirements = _ConversionManager._generateRequirements(input)
         
-        #debug start
-        print("First Pass:")
-        print(len(requirements))
-        for req in requirements:
-            print(req.id)
-        print()
-        #debug end
-        
         #Second pass
         #Put subrequirements into main requirements
         nestedReqs = _ConversionManager._nestRequirements(requirements)
-        
-        #debug start
-        print("Second Pass:")
-        print(len(nestedReqs))
-        for req in nestedReqs:
-            print(req.id)
-            for sub in req.subreqs:
-                print("Sub: " + sub.id)
-        print()
-        #debug end
         
         #Third pass
         #Convert to JSON String
@@ -93,7 +75,7 @@ class _ConversionManager:
         if (periodIndex == -1):
             return False
         #Now we check if everything before the first period is a number, which we consider sufficient to identify it as a new requirement
-        subline = line[0:periodIndex]  #TODO check this works
+        subline = line[0:periodIndex]
         if (subline.isdigit()):
             return True
         else:
