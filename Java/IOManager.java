@@ -1,5 +1,5 @@
 /*
-This class takes in input from a file.
+This class takes in input from a file and writes output to a file.
 Written by Yehonatan (Jonathan) Shabash.
 */
 
@@ -26,7 +26,7 @@ public class IOManager
 	
 	//Functions
 	
-	public void InstantiateReader()
+	public void instantiateReader()
 	{
 		printInstructions();
 		Scanner scan = new Scanner(System.in);
@@ -36,8 +36,11 @@ public class IOManager
 			try
 			{
 				String filename = scan.nextLine();
+				System.out.println("");
 				if (filename.equalsIgnoreCase("quit") || filename.equalsIgnoreCase("q"))
+				{
 					System.exit(0);
+				}
 				else if(filename.equals(""))
 					filename = "demo.txt";
 				reader = new BufferedReader(new FileReader(filename));
@@ -45,7 +48,8 @@ public class IOManager
 			}
 			catch (FileNotFoundException e)
 			{
-				System.out.println("Could not find the specified file, please try again.");
+				System.out.println("Could not find the specified file, please try again.\n");
+				System.out.print("Filename: ");
 			}
 			
 		} while (!fileFound);
@@ -60,6 +64,7 @@ public class IOManager
 		System.out.print("Filename: ");
 	}
 	
+	//instantiateReader must be called first
 	public ArrayList<String> read()
 	{
 		ArrayList<String> lines = new ArrayList<String>();
@@ -74,14 +79,27 @@ public class IOManager
 		}
 		catch (IOException e)
 		{
-			System.out.println("Failed to read file.");
+			System.out.println("Failed to read file.\n");
 			e.printStackTrace();
 		}
 		return lines;
 	}
 	
+	public void closeReader()
+	{
+		try
+		{
+			reader.close();
+		}
+		catch (IOException e)
+		{
+			System.out.println("Failed to close file reader.\n");
+			e.printStackTrace();
+		}
+	}
+	
 	//Returns name of the file being written to
-	public String InstantiateWriter()
+	public String instantiateWriter()
 	{
 		File outFile;
 		int counter = 0;
@@ -99,13 +117,14 @@ public class IOManager
 		}
 		catch (IOException e)
 		{
-			System.out.println("Failed to create output file.");
+			System.out.println("Failed to create output file.\n");
 			e.printStackTrace();
 		}
 		
 		return outFile.getName();
 	}
 	
+	//instantiateWriter must be called first
 	public void write(String output)
 	{
 		try
@@ -118,15 +137,15 @@ public class IOManager
 		}
 	}
 	
-	public void closeReaders()
+	public void closeWriter()
 	{
 		try
 		{
-			reader.close();
 			writer.close();
 		}
 		catch (IOException e)
 		{
+			System.out.println("Failed to close file writer.\n");
 			e.printStackTrace();
 		}
 	}

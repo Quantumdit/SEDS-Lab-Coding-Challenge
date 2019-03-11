@@ -1,5 +1,5 @@
 /*
-This class is responsible for converting the text into JSON
+This class is responsible for converting the text into JSON.
 Written by Yehonatan (Jonathan) Shabash.
 */
 
@@ -10,14 +10,29 @@ import java.lang.NumberFormatException;
 
 public class ConversionManager
 {
-	//The beginning and end of the JSON file is always the same
-	private static final String BEGINNING = "{\n\t\"RQs\": [\n";
-	private static final String ENDING = "\t]\n}";
-	
+	//The only public method of the class
+	//Converts an ArrayList of Strings containing the input into JSON string
 	public static String textToJSON(ArrayList<String> input)
 	{	
 		//First pass
-		//Generate requirements
+		//Generate a list requirements and subrequirements
+		ArrayList<Requirement> requirements = generateRequirements(input);
+		
+		//Second pass
+		//Put subrequirements into main requirements
+		ArrayList<Requirement> nestedReqs = nestRequirements(requirements);
+		
+		//Third pass
+		//Convert to JSON String
+		String outputJSON = generateJSON(nestedReqs);
+		
+		return outputJSON;
+	}
+	
+	//Helper functions
+	
+	private static ArrayList<Requirement> generateRequirements(ArrayList<String> input)
+	{
 		ArrayList<Requirement> requirements = new ArrayList<Requirement>();
 		ListIterator<String> inputIterator = input.listIterator();
 		Requirement currentReq = null;
@@ -35,34 +50,10 @@ public class ConversionManager
 					currentReq.appendDetails(line);
 			}
 		}
-		requirements.add(currentReq);				//Add the last requirement to the list
+		//Add the last requirement to the list
+		requirements.add(currentReq);
 		
-		//Second pass
-		//Group requirements into main requirements and subrequirements
-		ArrayList<Requirement> nestedReqs = nestRequirements(requirements);
-		
-		//Third pass
-		//Convert to String
-		String output = "";
-		output += BEGINNING;
-		currentReq = null;
-		for (int i = 0;i < nestedReqs.size();i++)
-		{
-			currentReq = nestedReqs.get(i);
-			output += "\t\t{\n";
-			output += "\t\t\t\"RQ" + (i+1) + "\": \"" + currentReq.getId() + "\",\n";
-			output += "\t\t\t\"Desc\" : \"" + currentReq.getDescription() + "\",\n";
-			output += "\t\t\t\"Details\":\"" + currentReq.getDetails() + "\",\n";
-			output += "\t\t\t\"SubRQs\":[" + subreqToJSON(currentReq.getSubreqs()) + "]\n";
-			output += "\t\t}";
-			//Add a comma, but only if this isn't the last requirement
-			if (i != nestedReqs.size()-1)
-				output += ",";
-			output += "\n";
-		}
-		
-		output += ENDING;
-		return output;
+		return requirements;
 	}
 	
 	private static boolean isRequirement(String line)
@@ -101,11 +92,40 @@ public class ConversionManager
 				currentReq = newReq;
 			}
 		}
-		nestedReqs.add(currentReq);			//Add the last requirement to the list
-		
-		//TODO recurse on nestedReqs
+		//Add the last requirement to the list
+		nestedReqs.add(currentReq);	
 		
 		return nestedReqs;
+	}
+	
+	private static String generateJSON(ArrayList<Requirement> nestedReqs)
+	{
+		//The beginning and end of the JSON file is always the same
+		final String BEGINNING = "{\n\t\"RQs\": [\n";
+		final String ENDING = "\t]\n}";
+		
+		String outputJSON = "";
+		outputJSON += BEGINNING;
+		
+		Requirement currentReq = null;
+		for (int i = 0;i < nestedReqs.size();i++)
+		{
+			currentReq = nestedReqs.get(i);
+			outputJSON += "\t\t{\n";
+			outputJSON += "\t\t\t\"RQ" + (i+1) + "\": \"" + currentReq.getId() + "\",\n";
+			outputJSON += "\t\t\t\"Desc\" : \"" + currentReq.getDescription() + "\",\n";
+			outputJSON += "\t\t\t\"Details\":\"" + currentReq.getDetails() + "\",\n";
+			outputJSON += "\t\t\t\"SubRQs\":[" + subreqToJSON(currentReq.getSubreqs()) + "]\n";
+			outputJSON += "\t\t}";
+			//Add a comma, but only if this isn't the last requirement
+			if (i != nestedReqs.size()-1)
+				outputJSON += ",";
+			outputJSON += "\n";
+		}
+		
+		outputJSON += ENDING;
+		
+		return outputJSON;
 	}
 	
 	private static String subreqToJSON(ArrayList<Requirement> subreq)
@@ -114,24 +134,22 @@ public class ConversionManager
 			return "";
 	
 		String indent = "\t\t\t";
-		String output = "\n";
+		String outputJSON = "\n";
 		Requirement currentReq = null;
 		for (int i = 0;i < subreq.size();i++)
 		{
 			currentReq = subreq.get(i);
-			output += indent + "\t\t{\n";
-			output += indent + "\t\t\t\"sub" + (i+1) + "\": \"" + currentReq.getId() + "\",\n";
-			output += indent + "\t\t\t\"desc\" : \"" + currentReq.getDescription() + "\",\n";
-			output += indent + "\t\t\t\"details\":\"" + currentReq.getDetails() + "\"\n";
-			//TODO fix recursive subRQs
-//			output += indent + "\t\t\t\"SubRQs\":[" + subreqToJSON(currentReq.getSubreqs()) + "]\n";
-			output += indent + "\t\t}";
+			outputJSON += indent + "\t\t{\n";
+			outputJSON += indent + "\t\t\t\"sub" + (i+1) + "\": \"" + currentReq.getId() + "\",\n";
+			outputJSON += indent + "\t\t\t\"desc\" : \"" + currentReq.getDescription() + "\",\n";
+			outputJSON += indent + "\t\t\t\"details\":\"" + currentReq.getDetails() + "\"\n";
+			outputJSON += indent + "\t\t}";
 			//Add a comma, but only if this isn't the last requirement
 			if (i != subreq.size()-1)
-				output += ",";
-			output += "\n" + indent;
+				outputJSON += ",";
+			outputJSON += "\n" + indent;
 		}
-		return output;
+		return outputJSON;
 	}
 	
 }

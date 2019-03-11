@@ -1,5 +1,5 @@
 /*
-This class is a single requirement, as read from the input
+This class is a single requirement. It can be either a main requirement or a subrequirement. A subrequirement should not have any subrequirements of its own.
 Written by Yehonatan (Jonathan) Shabash.
 */
 
