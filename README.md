@@ -1,4 +1,4 @@
-# SEDS-Lab-Coding-Challenge
+# SEDS Lab Coding Challenge
 
 The code in this project turns a human-readable list of requirements into JSON. See the Example folder for sample input and JSON output.
 
